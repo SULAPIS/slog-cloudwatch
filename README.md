@@ -7,11 +7,31 @@ slog-cloudwatch is a custom slog dispatcher that sends your Go application's log
 ### With AWS SDK
 
 ```go
+package main
+
+import (
+	"context"
+	"log/slog"
+
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs"
+
+	slogcloudwatch "github.com/sulapis/slog-cloudwatch"
+)
+
+func main() {
 	ctx := context.Background()
 	cfg, _ := config.LoadDefaultConfig(ctx)
 	cwClient := cloudwatchlogs.NewFromConfig(cfg)
 
-	dispatcher := NewCloudWatchDispatcher(ctx, cwClient, NewExportConfig(WithLogGroupName("slog-cloudwatch"), WithLogStreamName("stream-1")))
+	dispatcher := slogcloudwatch.NewCloudWatchDispatcher(
+		ctx,
+		cwClient,
+		slogcloudwatch.NewExportConfig(
+			slogcloudwatch.WithLogGroupName("slog-cloudwatch"),
+			slogcloudwatch.WithLogStreamName("stream-1"),
+		),
+	)
 
 	slog.SetDefault(slog.New(slog.NewTextHandler(dispatcher, nil)))
 
@@ -27,6 +47,8 @@ slog-cloudwatch is a custom slog dispatcher that sends your Go application's log
 	// This guarantees that even if the program exits before the next scheduled ticker interval,
 	// no log entries are lost.
 	dispatcher.Stop()
+}
+
 ```
 
 #### Chronological order
