@@ -102,9 +102,7 @@ func (be *BatchExporter) Run(ctx context.Context, rx <-chan LogEvent, done chan<
 			flush()
 			return
 		case <-ticker.C:
-			if len(be.Queue) == 0 {
-				continue
-			}
+			flush()
 		case ev, ok := <-rx:
 			if !ok {
 				flush()
