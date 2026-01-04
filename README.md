@@ -35,11 +35,8 @@ func main() {
 
 	slog.SetDefault(slog.New(slog.NewTextHandler(dispatcher, nil)))
 
-	slog.Info("start")
 	slog.Info("hello world")
 	slog.Info("another log")
-	slog.Error("a error")
-	slog.Info("end")
 
 	// Graceful shutdown: when Stop() is called or the context is canceled,
 	// the exporter ensures that all logs currently in memory are flushed
