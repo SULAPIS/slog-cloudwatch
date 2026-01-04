@@ -89,11 +89,14 @@ func (be *BatchExporter) Run(ctx context.Context, rx <-chan LogEvent, done chan<
 			return
 		}
 		logs := be.TakeFromQueue()
-		if err := be.Client.PutLogs(ctx, be.Config.Destination, logs); err != nil {
+
+		putLogsCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		if err := be.Client.PutLogs(putLogsCtx, be.Config.Destination, logs); err != nil {
 			fmt.Fprintf(os.Stderr,
 				"[slog-cloudwatch] Unable to put logs to cloudwatch: %v %+v\n",
 				err, be.Config.Destination)
 		}
+		cancel()
 	}
 
 	for {
