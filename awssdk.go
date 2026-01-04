@@ -14,7 +14,7 @@ type CloudwatchClient struct {
 	client *cloudwatchlogs.Client
 }
 
-func (s *CloudwatchClient) PutLogs(ctx context.Context, dest LogDestination, logs []LogEvent) error {
+func (s *CloudwatchClient) PutLogs(dest LogDestination, logs []LogEvent) error {
 	logEvents := make([]types.InputLogEvent, 0, len(logs))
 
 	for _, l := range logs {
@@ -30,7 +30,7 @@ func (s *CloudwatchClient) PutLogs(ctx context.Context, dest LogDestination, log
 		LogGroupName:  &dest.LogGroupName,
 		LogStreamName: &dest.LogStreamName,
 	}
-	output, err := s.client.PutLogEvents(ctx, input)
+	output, err := s.client.PutLogEvents(context.Background(), input)
 	if err != nil {
 		var rnfe *types.ResourceNotFoundException
 		if errors.As(err, &rnfe) {

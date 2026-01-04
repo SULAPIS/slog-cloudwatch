@@ -1,11 +1,7 @@
 package slogcloudwatch
 
-import (
-	"context"
-)
-
 type CloudWatchClient interface {
-	PutLogs(ctx context.Context, dest LogDestination, logs []LogEvent) error
+	PutLogs(dest LogDestination, logs []LogEvent) error
 }
 
 type LogDestinationNotFoundError struct {
