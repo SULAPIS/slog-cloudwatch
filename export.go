@@ -60,6 +60,12 @@ func WithLogStreamName(name string) ExportOption {
 	}
 }
 
+func OrderedLogs() ExportOption {
+	return func(ec *ExportConfig) {
+		ec.OrderedLogs = true
+	}
+}
+
 type BatchExporter struct {
 	Client CloudWatchClient
 	Queue  []LogEvent
