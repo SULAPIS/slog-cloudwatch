@@ -60,7 +60,7 @@ func WithLogStreamName(name string) ExportOption {
 	}
 }
 
-func OrderedLogs() ExportOption {
+func EnableOrderedLogs() ExportOption {
 	return func(ec *ExportConfig) {
 		ec.OrderedLogs = true
 	}
