@@ -49,14 +49,14 @@ func WithInterval(d time.Duration) ExportOption {
 }
 
 func WithLogGroupName(name string) ExportOption {
-	return func(c *ExportConfig) {
-		c.Destination.LogGroupName = name
+	return func(ec *ExportConfig) {
+		ec.Destination.LogGroupName = name
 	}
 }
 
 func WithLogStreamName(name string) ExportOption {
-	return func(c *ExportConfig) {
-		c.Destination.LogStreamName = name
+	return func(ec *ExportConfig) {
+		ec.Destination.LogStreamName = name
 	}
 }
 
