@@ -1,4 +1,4 @@
-module github.com/sulapis/slogcloudwatch
+module github.com/sulapis/slog-cloudwatch
 
 go 1.23
 
