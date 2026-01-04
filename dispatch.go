@@ -20,22 +20,18 @@ type LogEvent struct {
 }
 
 type CloudWatchDispatcher struct {
-	tx     chan<- LogEvent
-	cancel context.CancelFunc
-	done   chan struct{}
+	tx   chan<- LogEvent
+	done chan struct{}
 }
 
 func NewCloudWatchDispatcher(ctx context.Context, client *cloudwatchlogs.Client, ec ExportConfig) Dispatcher {
 	ch := make(chan LogEvent, 1024)
 
-	ctx, cancel := context.WithCancel(ctx)
-
 	exporter := NewBatchExporter(&CloudwatchClient{client: client}, ec)
 
 	dispatcher := CloudWatchDispatcher{
-		tx:     ch,
-		cancel: cancel,
-		done:   make(chan struct{}),
+		tx:   ch,
+		done: make(chan struct{}),
 	}
 	go exporter.Run(ctx, ch, dispatcher.done)
 
@@ -47,7 +43,7 @@ func (c *CloudWatchDispatcher) Dispatch(input LogEvent) {
 }
 
 func (c *CloudWatchDispatcher) Stop() {
-	c.cancel()
+	close(c.tx)
 	<-c.done
 }
 
